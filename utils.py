@@ -76,7 +76,7 @@ def extract_resize_normalize(video):
     return frame_list
 
 def load_processed_data():
-    pdb.set_trace()
+    
     PATH = os.getcwd()+'/Data/'
     
     feature_path = PATH + 'features.npy'
