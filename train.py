@@ -7,11 +7,13 @@ import pdb
 
 def trainer():
     x , y = load_processed_data()
-    
+    #pdb.set_trace()
+    #x = x.todense()
+    #y = y.to_tedense()
     # converting y to 4 column vector
     encoder = OneHotEncoder()
     y = encoder.fit_transform(y.reshape(-1,1))
-    
+    y = y.todense()
     #pdb.set_trace()
     x_train, x_test, y_train, y_test = train_test_split(x, y , test_size=0.33, shuffle=True)
     
