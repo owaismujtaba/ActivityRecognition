@@ -6,7 +6,7 @@ model_output_size = 4
 def cnn_model():
     # We will use a Sequential model for model construction
     model = Sequential()
-
+    #sbjkcbsjhcgshbcsjhsjhchsj
     # Defining The Model Architecture
     model.add(Conv2D(filters = 64, kernel_size = (3, 3), activation = 'relu', input_shape = (image_height, image_width, 3)))
     
