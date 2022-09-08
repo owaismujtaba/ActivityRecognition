@@ -3,10 +3,14 @@ from sklearn.model_selection import train_test_split
 from model import cnn_model
 from sklearn.preprocessing import OneHotEncoder
 import pdb
+import os
+from vis_utils import plot_train_accuracy_loss 
 
 
 def trainer():
     x , y = load_processed_data()
+    #x=x[:100]
+    #y = y[:100]
     #pdb.set_trace()
     #x = x.todense()
     #y = y.to_tedense()
@@ -19,17 +23,14 @@ def trainer():
     
     model = cnn_model()
     
-    model.compile(loss = 'categorical_crossentropy', optimizer = 'Adam', metrics = ["accuracy"])
+    model.compile(loss = 'categorical_crossentropy', optimizer = 'Adam', metrics = ["accuracy"]) 
+    
+    
+    model_training_history = model.fit(x = x_train, y = y_train, epochs = 2, batch_size = 8 , shuffle = True)
+    
+    model.save(os.getcwd()+"/Models/cnnmodel.h5")
+    plot_train_accuracy_loss(model_training_history)
     #pdb.set_trace()
-    
-    
-    
-    
-    
-    
-    model_training_history = model.fit(x = x_train, y = y_train, epochs = 50, batch_size = 8 , shuffle = True)
-    
-    
-    
+
     
     

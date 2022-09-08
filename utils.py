@@ -4,6 +4,7 @@ import pdb
 import random
 import numpy as np
 
+
 image_height, image_width = 64, 64
 
 max_images_per_class = 8000
@@ -86,3 +87,23 @@ def load_processed_data():
     labels = np.load(labels_path)
     
     return features, labels
+
+
+def test_model():
+    from model import cnn_model
+    from tensorflow.keras.models import save_model
+    #pdb.set_trace()
+    model = cnn_model()
+    save_model(model, os.getcwd()+'/Models/cnnmodel.h5')
+    x , y = load_processed_data()
+    
+    pred = model.predict(x)
+    pred = np.argmax(pred, axis=1)
+    
+    from sklearn.metrics import accuracy_score
+    
+    print("Accuracy on the full dataset :", accuracy_score(pred, y))
+    
+    
+    
+        
