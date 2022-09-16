@@ -6,15 +6,24 @@ import cv2
 import numpy as np
 
 image_height, image_width = 64, 64
+dataset_directory = os.getcwd()+'/UCF50/'
 
-classes_list = ["Basketball", "BreastStroke", "GolfSwing", "MilitaryParade"]
+#classes_list = ["Basketball", "BreastStroke", "GolfSwing", "MilitaryParade"]
+classes_list =  [f.path for f in os.scandir(dataset_directory) if f.is_dir() ]
+
+classes_list = [item.split('/')[5] for item in classes_list]
+
 def plot_train_accuracy_loss(history):
+  
     #pdb.set_trace()
-    epochs = [x for x in range(0, len(history.history))]
-    plt.plot(epochs, history.history['accuracy'])
-    plt.plot(epochs, history.history['loss'])
-    plt.legend(['Accuracy', 'Loss'])
-    plt.savefig(ps.getcwd()+'/Results/train_acc_loss.png', dpi=600)
+    #pdb.set_trace()
+    epochs = [x for x in range(0, len(history.history['accuracy']))]
+    plt.plot(epochs, history.history['accuracy'], color='green')
+    plt.plot(epochs, history.history['loss'], color='black')
+    plt.plot(epochs, history.history['val_accuracy'], color='red')
+    plt.plot(epochs, history.history['val_loss'], 'grey')
+    plt.legend(['Accuracy', 'Loss', 'val_acc', 'val_loss'])
+    plt.savefig(os.getcwd()+'/Results/train_acc_loss.png', dpi=600)
     
     
 

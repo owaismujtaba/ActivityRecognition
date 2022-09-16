@@ -1,7 +1,7 @@
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Conv2D, BatchNormalization, MaxPooling2D,GlobalAveragePooling2D, Dense
 image_height, image_width = 64,64 
-model_output_size = 4
+model_output_size = 36
 
 def cnn_model():
     # We will use a Sequential model for model construction

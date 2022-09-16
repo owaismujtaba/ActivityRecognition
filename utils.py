@@ -7,9 +7,13 @@ import numpy as np
 
 image_height, image_width = 64, 64
 
-max_images_per_class = 8000
+max_images_per_class = 4000
 dataset_directory =  os.getcwd()+ "/UCF50/"
-classes_list = ["Basketball", "BreastStroke", "GolfSwing", "MilitaryParade"]
+#classes_list = ["Basketball", "BreastStroke", "GolfSwing", "MilitaryParade"]
+classes_list =  [f.path for f in os.scandir(dataset_directory) if f.is_dir() ]
+
+classes_list = [item.split('/')[5] for item in classes_list]
+
 model_output_size = len(classes_list)
 
 
@@ -39,15 +43,27 @@ def create_dataset():
             temp_features.extend(frames)
         
         # Adding randomly selected frames to the features list
-        features.extend(random.sample(temp_features, max_images_per_class))
- 
-        # Adding Fixed number of labels to the labels list
-        labels.extend([class_index] * max_images_per_class)
+        try:
+          features.extend(random.sample(temp_features, max_images_per_class))
 
-         
-        # Emptying the temp_features list so it can be reused to store all frames of the next class.
-        temp_features.clear()
- 
+          # Adding Fixed number of labels to the labels list
+          labels.extend([class_index] * max_images_per_class)
+
+
+          # Emptying the temp_features list so it can be reused to store all frames of the next class.
+          temp_features.clear()
+        except:
+          print("Skipping Video")
+          features.extend(random.sample(temp_features, 4000))
+
+          # Adding Fixed number of labels to the labels list
+          labels.extend([class_index] * 4000)
+
+
+          # Emptying the temp_features list so it can be reused to store all frames of the next class.
+          temp_features.clear()
+          
+
     # Converting the features and labels lists to numpy arrays
     features = np.asarray(features)
     labels = np.array(labels) 
@@ -88,20 +104,29 @@ def load_processed_data():
     
     return features, labels
 
-
+  
+def test_data():
+  
+    x = np.load(os.getcwd()+'/Data/x_test.npy')
+    y = np.load(os.getcwd()+'/Data/y_test.npy')
+    
+    return x,y
+  
+  
 def test_model():
     from model import cnn_model
     from tensorflow.keras.models import save_model
     #pdb.set_trace()
     model = cnn_model()
     save_model(model, os.getcwd()+'/Models/cnnmodel.h5')
-    x , y = load_processed_data()
+    x , y = test_data()
     
     pred = model.predict(x)
     pred = np.argmax(pred, axis=1)
     
     from sklearn.metrics import accuracy_score
-    
+    #pdb.set_trace()
+    y = np.argmax(y, axis=1)
     print("Accuracy on the full dataset :", accuracy_score(pred, y))
     
     
